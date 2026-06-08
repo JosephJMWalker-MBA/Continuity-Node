@@ -1,0 +1,40 @@
+{
+  "id": "raw:sha256:7f8a9b2c",
+  "record_type": "raw",
+  "schema_version": "1.0",
+  "created_at": "2026-06-04T14:30:22Z",
+  "content_hash": "sha256:7f8a9b2c9d0e",
+  "kind": "journal_entry",
+  "preservation_core": {
+    "format": "text/markdown",
+    "mime_type": "text/markdown",
+    "content_hash": "sha256:7f8a9b2c9d0e",
+    "storage_reference": "raw/2026/06/04/journal-20250604-1430.md",
+    "size_bytes": 2456,
+    "ingest_timestamp": "2026-06-04T14:30:22Z",
+    "original_source": "manual_import"
+  },
+  "governance_core": {
+    "sensitivity": "private",
+    "rights_basis": "user_owned",
+    "consent_receipt_ids": [
+      "consent:uuid-123"
+    ],
+    "retention_policy": "indefinite",
+    "legal_hold": false,
+    "encryption_status": "at_rest"
+  },
+  "descriptive_metadata": {
+    "title": "Decision to leave corporate role",
+    "date_created": "2026-06-03",
+    "tags": [
+      "career",
+      "values",
+      "transition"
+    ],
+    "dc:creator": "Joseph Walker",
+    "dc:subject": [
+      "personal_reasoning"
+    ]
+  }
+}

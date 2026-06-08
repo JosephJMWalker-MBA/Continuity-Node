@@ -1,0 +1,26 @@
+{
+  "id": "witness-packet:uuid-998877",
+  "record_type": "witness_packet",
+  "schema_version": "1.0",
+  "created_at": "2026-06-04T00:00:00Z",
+  "content_hash": "sha256:9abc",
+  "recipient_did": "did:web:advisor.example.com",
+  "purpose": "validation_of_pattern",
+  "expires_at": "2026-07-15T00:00:00Z",
+  "redaction_merkle_root": "merkle:root1",
+  "items": [
+    {
+      "type": "interpretation",
+      "id": "interp:uuid-9f8e7d6c",
+      "redacted_fields": [
+        "raw_references.spans",
+        "content.claim"
+      ]
+    }
+  ],
+  "signature": {
+    "algorithm": "ed25519",
+    "key_id": "user-key-2026",
+    "value": "base64-signature"
+  }
+}

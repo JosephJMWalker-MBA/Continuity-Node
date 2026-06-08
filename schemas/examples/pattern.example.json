@@ -1,0 +1,30 @@
+{
+  "id": "pattern:uuid-1122",
+  "record_type": "pattern",
+  "schema_version": "1.0",
+  "created_at": "2026-06-01T00:00:00Z",
+  "content_hash": "sha256:1234",
+  "name": "Values-Driven Decision Maker",
+  "category": "core_value",
+  "status": "confirmed",
+  "confidence": 0.81,
+  "evidence_weight": 17,
+  "first_observed": "2024-11-12",
+  "last_reviewed": "2026-06-01",
+  "next_review": "2026-12-01",
+  "supporting_interpretations": [
+    "interp:uuid-1",
+    "interp:uuid-2"
+  ],
+  "contradicting_interpretations": [
+    "interp:uuid-45"
+  ],
+  "metadata": {
+    "risk_level": "medium",
+    "tags": [
+      "values",
+      "career"
+    ],
+    "decay_rate": 0.05
+  }
+}

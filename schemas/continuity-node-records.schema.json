@@ -1,0 +1,843 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pairadimes.org/schemas/continuity-node/records.schema.json",
+  "title": "Continuity Node \u2014 Record Schemas",
+  "description": "Formal JSON Schema (draft 2020-12) for the Continuity Node record types defined in Appendix A of the Continuity Node Framework. A valid instance is exactly one record type, discriminated by `record_type`. Records are extensible: unspecified properties are permitted.",
+  "$defs": {
+    "envelope": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "UUIDv7 or content-hash-prefixed identifier"
+        },
+        "record_type": {
+          "type": "string",
+          "enum": [
+            "raw",
+            "interpretation",
+            "pattern",
+            "lens",
+            "witness_packet",
+            "migration",
+            "continuity_will",
+            "audit_event",
+            "interchange_abstraction"
+          ]
+        },
+        "schema_version": {
+          "type": "string"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "RFC 3339 / ISO 8601 timestamp"
+        },
+        "last_modified": {
+          "type": "string",
+          "format": "date-time",
+          "description": "non-raw records only; raw records are immutable"
+        },
+        "content_hash": {
+          "type": "string",
+          "pattern": "^sha256:"
+        }
+      },
+      "required": [
+        "id",
+        "record_type",
+        "content_hash"
+      ]
+    },
+    "raw": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/envelope"
+        }
+      ],
+      "type": "object",
+      "properties": {
+        "record_type": {
+          "const": "raw"
+        },
+        "kind": {
+          "type": "string"
+        },
+        "preservation_core": {
+          "type": "object",
+          "properties": {
+            "format": {
+              "type": "string"
+            },
+            "mime_type": {
+              "type": "string"
+            },
+            "content_hash": {
+              "type": "string",
+              "pattern": "^sha256:"
+            },
+            "storage_reference": {
+              "type": "string"
+            },
+            "size_bytes": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "ingest_timestamp": {
+              "type": "string",
+              "format": "date-time",
+              "description": "RFC 3339 / ISO 8601 timestamp"
+            },
+            "original_source": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "content_hash"
+          ]
+        },
+        "governance_core": {
+          "type": "object",
+          "properties": {
+            "sensitivity": {
+              "enum": [
+                "public",
+                "private",
+                "restricted",
+                "sealed"
+              ]
+            },
+            "rights_basis": {
+              "enum": [
+                "user_owned",
+                "third_party_consent",
+                "public_domain",
+                "inherited"
+              ]
+            },
+            "consent_receipt_ids": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "retention_policy": {
+              "type": "string"
+            },
+            "legal_hold": {
+              "type": "boolean"
+            },
+            "encryption_status": {
+              "enum": [
+                "at_rest",
+                "sealed"
+              ]
+            }
+          }
+        },
+        "descriptive_metadata": {
+          "type": "object"
+        }
+      },
+      "required": [
+        "record_type",
+        "preservation_core"
+      ]
+    },
+    "interpretation": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/envelope"
+        }
+      ],
+      "type": "object",
+      "properties": {
+        "record_type": {
+          "const": "interpretation"
+        },
+        "parent_id": {
+          "type": "string"
+        },
+        "raw_references": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "properties": {
+              "raw_id": {
+                "type": "string"
+              },
+              "spans": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "start": {
+                      "type": "integer"
+                    },
+                    "end": {
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "start",
+                    "end"
+                  ]
+                }
+              },
+              "weight": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              }
+            },
+            "required": [
+              "raw_id"
+            ]
+          }
+        },
+        "provenance": {
+          "type": "object",
+          "properties": {
+            "engine": {
+              "type": "object",
+              "properties": {
+                "provider": {
+                  "type": "string"
+                },
+                "model_name": {
+                  "type": "string"
+                },
+                "model_version": {
+                  "type": "string"
+                },
+                "inference_run_id": {
+                  "type": "string"
+                }
+              }
+            },
+            "prompt_template_id": {
+              "type": "string"
+            },
+            "lens_id": {
+              "type": "string"
+            },
+            "timestamp": {
+              "type": "string",
+              "format": "date-time",
+              "description": "RFC 3339 / ISO 8601 timestamp"
+            },
+            "agent_type": {
+              "enum": [
+                "model",
+                "user",
+                "witness"
+              ]
+            },
+            "agent_id": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "lens_id"
+          ]
+        },
+        "content": {
+          "type": "object",
+          "properties": {
+            "claim": {
+              "type": "string"
+            },
+            "supporting_evidence": {
+              "type": "string"
+            },
+            "counter_evidence": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "confidence": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            }
+          },
+          "required": [
+            "claim"
+          ]
+        },
+        "user_response": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "enum": [
+                "accepted",
+                "revised",
+                "rejected",
+                "disputed",
+                "unreviewed"
+              ]
+            },
+            "revised_claim": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "notes": {
+              "type": "string"
+            },
+            "timestamp": {
+              "type": "string",
+              "format": "date-time",
+              "description": "RFC 3339 / ISO 8601 timestamp"
+            }
+          },
+          "required": [
+            "status"
+          ]
+        },
+        "governance": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "enum": [
+                "active",
+                "disputed",
+                "superseded",
+                "sealed",
+                "redacted"
+              ]
+            },
+            "witness_attestations": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "required": [
+        "record_type",
+        "raw_references",
+        "provenance",
+        "content"
+      ]
+    },
+    "pattern": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/envelope"
+        }
+      ],
+      "type": "object",
+      "properties": {
+        "record_type": {
+          "const": "pattern"
+        },
+        "name": {
+          "type": "string"
+        },
+        "category": {
+          "enum": [
+            "core_value",
+            "habit",
+            "cognitive_pattern",
+            "trauma_response",
+            "identity"
+          ]
+        },
+        "status": {
+          "enum": [
+            "proposed",
+            "confirmed",
+            "refuted",
+            "pending_review",
+            "demoted"
+          ]
+        },
+        "confidence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "evidence_weight": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "first_observed": {
+          "type": "string"
+        },
+        "last_reviewed": {
+          "type": "string"
+        },
+        "next_review": {
+          "type": "string"
+        },
+        "supporting_interpretations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "contradicting_interpretations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "metadata": {
+          "type": "object"
+        }
+      },
+      "required": [
+        "record_type",
+        "name",
+        "status"
+      ]
+    },
+    "lens": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/envelope"
+        }
+      ],
+      "type": "object",
+      "properties": {
+        "record_type": {
+          "const": "lens"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "ontology_reference": {
+          "type": "string",
+          "format": "uri"
+        },
+        "associated_values": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "provenance": {
+          "type": "object"
+        }
+      },
+      "required": [
+        "record_type",
+        "name",
+        "description"
+      ]
+    },
+    "witness_packet": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/envelope"
+        }
+      ],
+      "type": "object",
+      "properties": {
+        "record_type": {
+          "const": "witness_packet"
+        },
+        "recipient_did": {
+          "type": "string",
+          "pattern": "^did:"
+        },
+        "purpose": {
+          "type": "string"
+        },
+        "expires_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "RFC 3339 / ISO 8601 timestamp"
+        },
+        "redaction_merkle_root": {
+          "type": "string"
+        },
+        "items": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string"
+              },
+              "id": {
+                "type": "string"
+              },
+              "redacted_fields": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": [
+              "type",
+              "id"
+            ]
+          }
+        },
+        "signature": {
+          "type": "object",
+          "properties": {
+            "algorithm": {
+              "type": "string"
+            },
+            "key_id": {
+              "type": "string"
+            },
+            "value": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "required": [
+        "record_type",
+        "recipient_did",
+        "items"
+      ]
+    },
+    "migration": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/envelope"
+        }
+      ],
+      "type": "object",
+      "properties": {
+        "record_type": {
+          "const": "migration"
+        },
+        "from_schema": {
+          "type": "string"
+        },
+        "to_schema": {
+          "type": "string"
+        },
+        "date": {
+          "type": "string",
+          "format": "date-time",
+          "description": "RFC 3339 / ISO 8601 timestamp"
+        },
+        "reason": {
+          "type": "string"
+        },
+        "semantic_delta": {
+          "type": "object",
+          "properties": {
+            "preserved": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "transformed": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "entity": {
+                    "type": "string"
+                  },
+                  "field": {
+                    "type": "string"
+                  },
+                  "change": {
+                    "type": "string"
+                  },
+                  "impact": {
+                    "type": "string"
+                  },
+                  "records_affected": {
+                    "type": "integer"
+                  }
+                }
+              }
+            },
+            "human_review_flagged": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "attestations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "record_type",
+        "from_schema",
+        "to_schema",
+        "semantic_delta"
+      ]
+    },
+    "continuity_will": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/envelope"
+        }
+      ],
+      "type": "object",
+      "properties": {
+        "record_type": {
+          "const": "continuity_will"
+        },
+        "owner_did": {
+          "type": "string",
+          "pattern": "^did:"
+        },
+        "effective_upon": {
+          "enum": [
+            "incapacity",
+            "death",
+            "user_defined_event"
+          ]
+        },
+        "last_updated": {
+          "type": "string",
+          "format": "date-time",
+          "description": "RFC 3339 / ISO 8601 timestamp"
+        },
+        "rules": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "properties": {
+              "action": {
+                "enum": [
+                  "preserve",
+                  "seal",
+                  "delete",
+                  "transfer",
+                  "sunset"
+                ]
+              },
+              "target": {
+                "type": "string"
+              },
+              "conditions": {
+                "type": "object",
+                "properties": {
+                  "trigger": {
+                    "type": "string"
+                  },
+                  "heirs": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "pattern": "^did:"
+                    }
+                  }
+                }
+              }
+            },
+            "required": [
+              "action"
+            ]
+          }
+        },
+        "endowment_reference": {
+          "type": "string"
+        },
+        "custodians": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^did:"
+          }
+        },
+        "signature": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "record_type",
+        "owner_did",
+        "rules"
+      ]
+    },
+    "audit_event": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/envelope"
+        }
+      ],
+      "type": "object",
+      "properties": {
+        "record_type": {
+          "const": "audit_event"
+        },
+        "event_type": {
+          "enum": [
+            "fixity_check",
+            "migration",
+            "ingest",
+            "export",
+            "witness_response",
+            "key_rotation",
+            "seal",
+            "deletion"
+          ]
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time",
+          "description": "RFC 3339 / ISO 8601 timestamp"
+        },
+        "target_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "outcome": {
+          "enum": [
+            "success",
+            "failure",
+            "warning"
+          ]
+        },
+        "details": {
+          "type": "object"
+        },
+        "actor": {
+          "type": "object",
+          "properties": {
+            "agent_type": {
+              "enum": [
+                "system",
+                "user",
+                "custodian"
+              ]
+            },
+            "agent_id": {
+              "type": "string"
+            }
+          }
+        },
+        "external_anchor": {
+          "type": "object",
+          "properties": {
+            "service": {
+              "type": "string"
+            },
+            "reference": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "required": [
+        "record_type",
+        "event_type",
+        "timestamp",
+        "outcome"
+      ]
+    },
+    "interchange_abstraction": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/envelope"
+        }
+      ],
+      "type": "object",
+      "properties": {
+        "record_type": {
+          "const": "interchange_abstraction"
+        },
+        "export_timestamp": {
+          "type": "string",
+          "format": "date-time",
+          "description": "RFC 3339 / ISO 8601 timestamp"
+        },
+        "scope": {
+          "enum": [
+            "patterns",
+            "validated_positions",
+            "value_frames"
+          ]
+        },
+        "items": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object"
+          }
+        },
+        "permissions": {
+          "type": "object",
+          "properties": {
+            "recipient_did": {
+              "type": "string",
+              "pattern": "^did:"
+            },
+            "granted_scopes": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "revocable": {
+              "type": "boolean"
+            }
+          }
+        },
+        "lineage_hash": {
+          "type": "string",
+          "pattern": "^sha256:"
+        }
+      },
+      "required": [
+        "record_type",
+        "scope",
+        "items",
+        "permissions"
+      ]
+    }
+  },
+  "oneOf": [
+    {
+      "$ref": "#/$defs/raw"
+    },
+    {
+      "$ref": "#/$defs/interpretation"
+    },
+    {
+      "$ref": "#/$defs/pattern"
+    },
+    {
+      "$ref": "#/$defs/lens"
+    },
+    {
+      "$ref": "#/$defs/witness_packet"
+    },
+    {
+      "$ref": "#/$defs/migration"
+    },
+    {
+      "$ref": "#/$defs/continuity_will"
+    },
+    {
+      "$ref": "#/$defs/audit_event"
+    },
+    {
+      "$ref": "#/$defs/interchange_abstraction"
+    }
+  ]
+}

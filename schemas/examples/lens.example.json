@@ -1,0 +1,20 @@
+{
+  "id": "lens:moral-foundations-care",
+  "record_type": "lens",
+  "schema_version": "1.0",
+  "created_at": "2025-02-15T00:00:00Z",
+  "content_hash": "sha256:5678",
+  "name": "Moral Foundations Theory - Care/Harm",
+  "description": "Evaluates situations primarily through protection, compassion, and prevention of harm.",
+  "ontology_reference": "https://moralfoundations.org",
+  "associated_values": [
+    "care",
+    "empathy",
+    "nurturance"
+  ],
+  "provenance": {
+    "source": "Haidt, Graham, et al.",
+    "added_by": "user",
+    "added_date": "2025-02-15"
+  }
+}

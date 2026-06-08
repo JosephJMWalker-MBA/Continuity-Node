@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "continuity-node"
+version = "0.1.0"
+description = "Reference implementation of the Continuity Node Framework: a user-owned, local-first longitudinal memory-and-interpretation system."
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "CC-BY-4.0" }
+authors = [{ name = "Joseph JM Walker" }]
+keywords = ["personal-ai", "longitudinal-memory", "provenance", "digital-preservation", "user-owned-data"]
+
+[project.optional-dependencies]
+validation = ["jsonschema>=4.18"]
+dev = ["jsonschema>=4.18", "pytest>=7"]
+
+[project.scripts]
+continuity-node = "continuity_node.cli:main"
+
+[tool.setuptools]
+packages = ["continuity_node", "continuity_node.engines"]

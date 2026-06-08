@@ -1,0 +1,27 @@
+{
+  "id": "will:uuid-778899",
+  "record_type": "continuity_will",
+  "schema_version": "1.0",
+  "created_at": "2026-06-01T09:00:00Z",
+  "content_hash": "sha256:dd44",
+  "owner_did": "did:web:josephwalker.example",
+  "effective_upon": "death",
+  "last_updated": "2026-06-01T09:00:00Z",
+  "rules": [
+    {
+      "action": "seal",
+      "target": "sensitivity:private",
+      "conditions": {
+        "trigger": "death",
+        "heirs": [
+          "did:web:heir1"
+        ]
+      }
+    }
+  ],
+  "endowment_reference": "trust:uuid-334455",
+  "custodians": [
+    "did:web:trustee-primary"
+  ],
+  "signature": "base64-signature"
+}
