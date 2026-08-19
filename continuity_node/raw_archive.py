@@ -1,7 +1,9 @@
-"""Layer 1 - Raw Archive: immutable, content-addressed storage for source records.
+"""Layer 1 - Raw Archive: content-addressed, write-once-through-API source storage.
 
 Content is keyed by SHA-256, so ingesting the same bytes twice is idempotent. Raw
-records are canonical and never mutated; everything else is derived from them.
+records are treated as canonical and are not overwritten by this reference implementation;
+everything else is derived from them. The backing files are ordinary local files, so this
+module does not provide filesystem immutability, tamper protection, or encryption at rest.
 """
 import json
 import os
@@ -25,7 +27,7 @@ class RawArchive:
         h = sha256_text(text)
         rid = f"raw:{h}"
         path = self._hash_path(h)
-        if not os.path.exists(path):  # immutable + deduplicated
+        if not os.path.exists(path):  # write once through this API + deduplicated
             with open(path, "w") as f:
                 f.write(text)
         record = {
@@ -45,7 +47,6 @@ class RawArchive:
                 "sensitivity": sensitivity,
                 "rights_basis": "user_owned",
                 "legal_hold": False,
-                "encryption_status": "at_rest",
             },
             "descriptive_metadata": {
                 "title": title or (text.strip().splitlines()[0][:60] if text.strip() else "untitled"),
