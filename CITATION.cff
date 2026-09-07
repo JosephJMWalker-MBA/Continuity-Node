@@ -1,0 +1,24 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it using the metadata in this file."
+title: "Continuity Node: Reference Implementation of the Continuity Node Framework"
+type: software
+version: 0.1.0
+authors:
+  - family-names: Walker
+    given-names: Joseph JM
+    orcid: "https://orcid.org/0009-0005-5099-807X"
+abstract: >-
+  A runnable Python reference implementation of the Continuity Node Framework,
+  demonstrating a user-owned, local-first longitudinal memory-and-interpretation
+  architecture with raw/interpretation separation, rebuildable derived state,
+  provenance-tagged interpretive lineage, governed pattern promotion and
+  demotion, and interchangeable inference-engine boundaries.
+keywords:
+  - personal AI
+  - longitudinal memory
+  - provenance
+  - digital preservation
+  - user-owned data
+license: CC-BY-4.0
+repository-code: "https://github.com/JosephJMWalker-MBA/Continuity-Node"
+url: "https://github.com/JosephJMWalker-MBA/Continuity-Node"
