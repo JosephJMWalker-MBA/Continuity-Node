@@ -144,6 +144,8 @@ The schema includes record types for `lens`, `witness_packet`, `migration`, `con
 - posthumous-access governance; and
 - the broader multi-generation continuity mechanisms described by the framework.
 
+A future-design note now records one bounded direction for that broader continuity work: [**Inheritable Skills**](docs/inheritable-skills.md) — how preserved conversational/lived history might produce inspectable candidate skills without collapsing repetition into wisdom, memory into authority, or inheritance into permanent control. It is a hypothesis, not an implemented subsystem.
+
 ## Project layout
 
 ```text
